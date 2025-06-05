@@ -1,129 +1,32 @@
-**Name:** SOWMYA BADONI
-**Register Number:** 212223230211
+# Exp - 6 STUDENT ONLINE EXAM REGISTRATION SYSTEM
 
-## Aim: 
-   To construct a python program to implement approximate inference using Gibbs Sampling.</br>
-## Algorithm:
-   Step 1: Bayesian Network Definition and CPDs:<br>
-    <ul> <li>Define the Bayesian network structure using the BayesianNetwork class from pgmpy.models.</li>
-    <li>Define Conditional Probability Distributions (CPDs) for each variable using the TabularCPD class.</li>
-    <li>Add the CPDs to the network.</li></ul>
-    Step 2: Printing Bayesian Network Structure:<br>
-    <ul><li>Print the structure of the Bayesian network using the print(network) statement.</li></ul>
-   Step 3: Graph Visualization:
-    <ul><li>Import the necessary libraries (networkx and matplotlib).</li>
-    <li>Create a directed graph using networkx.DiGraph().</li>
-    <li>Define the nodes and edges of the graph.</li>
-    <li>Add nodes and edges to the graph.</li>
-    <li>Optionally, define positions for the nodes.</li>
-    <li>Use nx.draw() to visualize the graph using matplotlib.</li></ul>
-    Step 4: Gibbs Sampling and MCMC:<br>
-    <ul><li>Initialize Gibbs Sampling for MCMC using the GibbsSampling class and provide the Bayesian network.</li>
-    <li>Set the number of samples to be generated using num_samples.</li></ul>
-    Step 5: Perform MCMC Sampling:<br>
-    <ul><li>Use the sample() method of the GibbsSampling instance to perform MCMC sampling.</li>
-    <li>Store the generated samples in the samples variable.</li></ul>
-    Step 6: Approximate Probability Calculation:<br>
-    <ul><li>Specify the variable for which you want to calculate the approximate probabilities (query_variable).</li>
-    <li>Use .value_counts(normalize=True) on the samples of the query_variable to calculate approximate probabilities.</li></ul>
-    Step 7:Print Approximate Probabilities:<br>
-    <ul><li>Print the calculated approximate probabilities for the specified query_variable.</li></ul>
+# AIM:
+To develop a project Student Information System using star UML tools.
 
+# PROBLEM STATEMENT:
+A Student information system (SIS) is a software application for educational establishments to manage student data. Student information systems provide capabilities for entering student test and other assessment scores, building student schedules, tracking student attendance, and managing many other student-related data needs in a school, college or university.
 
-## Program:
-```
-from pgmpy.models import DiscreteBayesianNetwork
-from pgmpy.factors.discrete import TabularCPD
-from pgmpy.sampling import GibbsSampling
-import networkx as nx
-import matplotlib.pyplot as plt
+### DEVELOPED BY : ARJUN N S
+**Register Number:** 212223230020
+# UML DIAGRAMS:
 
-alarm_model = DiscreteBayesianNetwork(
-    [
-        ("Burglary", "Alarm"),
-        ("Earthquake", "Alarm"),
-        ("Alarm", "JohnCalls"),
-        ("Alarm", "MaryCalls"),
-    ]
-)
+## USE CASE:
+![UseCaseDiagram for Exam Registration systen](https://github.com/user-attachments/assets/632b9f67-a2e9-46bd-92eb-82ab9330df87)
 
-# Defining the parameters using CPT
-from pgmpy.factors.discrete import TabularCPD
+## CLASS DIAGRAM:
+![Class Diagram for Exam registration system](https://github.com/user-attachments/assets/d5d7950d-a227-4842-9c00-0754ca5d6979)
 
-cpd_burglary = TabularCPD(
-    variable="Burglary", variable_card=2, values=[[0.999], [0.001]]
-)
-cpd_earthquake = TabularCPD(
-    variable="Earthquake", variable_card=2, values=[[0.998], [0.002]]
-)
-cpd_alarm = TabularCPD(
-    variable="Alarm",
-    variable_card=2,
-    values=[[0.999, 0.71, 0.06, 0.05], [0.001, 0.29, 0.94, 0.95]],
-    evidence=["Burglary", "Earthquake"],
-    evidence_card=[2, 2],
-)
-cpd_johncalls = TabularCPD(
-    variable="JohnCalls",
-    variable_card=2,
-    values=[[0.95, 0.1], [0.05, 0.9]],
-    evidence=["Alarm"],
-    evidence_card=[2],
-)
-cpd_marycalls = TabularCPD(
-    variable="MaryCalls",
-    variable_card=2,
-    values=[[0.1, 0.7], [0.9, 0.3]],
-    evidence=["Alarm"],
-    evidence_card=[2],
-)
+## SEQUENCE DIAGRAM:
+![SequenceDiagram for exam registration system](https://github.com/user-attachments/assets/22421c83-869c-4c53-bff5-9ad55a608ae6)
 
-# Associating the parameters with the model structure
-alarm_model.add_cpds(
-    cpd_burglary, cpd_earthquake, cpd_alarm, cpd_johncalls, cpd_marycalls
-)
+## COMMUNICATION DIAGRAM:
+![CommunicationDiagram for Exam Registration system](https://github.com/user-attachments/assets/384f9dc8-933f-49bf-8d9b-3cd0d73f5557)
 
-print("Bayesian Network Structure")
-print(alarm_model)
+## ACTIVITY DIAGRAM:
+![ActivityDiagram For Exam Registration system](https://github.com/user-attachments/assets/bca065e8-3daf-4bb2-ab9e-e63af5257df9)
 
-G=nx.DiGraph()
+## PACKAGE DIAGRAM:
+![CommunicationDiagram for Exam Registration system](https://github.com/user-attachments/assets/53c6373d-d8fd-4dbd-a274-a2d720a94f5f)
 
-nodes=['Burglary','Earthquake','JohnCalls','MaryCalls']
-edges=[('Burglary','Alarm'),('Earthquake','Alarm'),('Alarm','JohnCalls'),('Alarm','MaryCalls')]
-
-G.add_nodes_from(nodes)
-G.add_edges_from(edges)
-
-pos={
-    'Burglary':(0,0),
-    'Earthquake':(2,0),
-    'Alarm':(1,-2),
-    'JohnCalls':(0,-4),
-    'MaryCalls':(2,-4)
-    }
-
-nx.draw(G,pos,with_labels=True,node_size=1500,node_color="skyblue",font_size=10,font_weight="bold",arrowsize=20)
-plt.title("Bayesian Network: Burglar Alarm Problem")
-plt.show()
-
-gibbssampler=GibbsSampling(alarm_model)
-
-num_samples=10000
-
-samples=gibbssampler.sample(size=num_samples)
-
-query_variable="Burglary"
-query_result=samples[query_variable].value_counts(normalize=True)
-
-print("\n Approximate probabilities of {}:".format(query_variable))
-print(query_result)
-```
-
-## Output:
-<img width=35% src="https://github.com/user-attachments/assets/5e971221-b66b-4541-a8ae-5ffdfed68905" >
-
-<img width=35% src="https://github.com/user-attachments/assets/669122ec-b924-4091-9eff-f1494fa89f7a" >
-
-
-## Result:
-Thus, Gibb's Sampling( Approximate Inference method) is succuessfully implemented using python.
+# RESULT:
+Thus the Student information system project was executed and the output was verified.
